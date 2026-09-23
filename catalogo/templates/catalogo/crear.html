@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>GamerHub | Registrar Videojuego</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body { background: #0a0612; color: #f8f9fa; font-family: 'Rajdhani', sans-serif; }
+        .font-gamer { font-family: 'Orbitron', sans-serif; }
+        .form-container { background: rgba(22, 15, 38, 0.9); border: 1px solid #00f0ff; border-radius: 16px; box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="container py-5 d-flex justify-content-center">
+        <div class="col-md-6 form-container p-5 mt-4">
+            <h2 class="text-center font-gamer text-info mb-4">INGRESAR NUEVO JUEGO</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-info w-50 font-gamer fw-bold text-dark">GUARDAR</button>
+                    <a href="{% url 'lista_videojuegos' %}" class="btn btn-outline-secondary w-50 font-gamer fw-bold text-white">VOLVER</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
