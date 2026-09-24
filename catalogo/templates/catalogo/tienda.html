@@ -1,199 +1,254 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamershop | Tienda de Videojuegos</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://jsdelivr.net" rel="stylesheet">
-    <!-- Iconos de Bootstrap -->
-    <link href="https://jsdelivr.net" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://googleapis.com" rel="stylesheet">
-    
-    <style>
-        :root {
-            --neon-cyan: #00f0ff;
-            --neon-pink: #ff007f;
-            --bg-dark: #0a0612;
-            --card-bg: rgba(22, 15, 38, 0.7);
-        }
+{% extends 'catalogo/base.html' %}
 
-        body {
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.12) 0%, transparent 40%);
-            color: #f8f9fa;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.15rem;
-            min-height: 100vh;
-        }
+{% block title %}GamerShop | Catálogo de Videojuegos{% endblock %}
 
-        .game-title-font { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+{% block content %}
+    <header class="text-center pb-3">
+        <h1 class="display-6 fw-bold font-heading text-white mb-2">Catálogo de Videojuegos</h1>
+        <p class="text-secondary fs-6 mb-0" style="color: var(--text-muted) !important;">
+            Listado completo de títulos, plataformas, precios y existencias disponibles en el inventario.
+        </p>
+        <div class="mx-auto mt-3 accent-bar"></div>
+    </header>
 
-        .navbar-custom {
-            background: rgba(10, 6, 18, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
-        }
-
-        /* TÍTULO PRINCIPAL MONUMENTAL */
-        .brand-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 3.8rem !important;
-            color: var(--neon-cyan) !important;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.9), 
-                         0 0 25px rgba(0, 240, 255, 0.6), 
-                         0 0 50px rgba(0, 240, 255, 0.3);
-            letter-spacing: 5px;
-            transition: all 0.4s ease;
-        }
-
-        .brand-logo:hover {
-            color: var(--neon-pink) !important;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.9), 0 0 25px rgba(255, 0, 127, 0.6), 0 0 50px rgba(255, 0, 127, 0.3);
-        }
-
-        .btn-add-game {
-            border: 2px solid var(--neon-cyan);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .btn-add-game:hover {
-            background-color: var(--neon-cyan);
-            color: #0a0612;
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-
-        .game-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            backdrop-filter: blur(8px);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
-        }
-
-        .game-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--neon-pink);
-            box-shadow: 0 15px 30px rgba(255, 0, 127, 0.3);
-        }
-
-        .badge-platform {
-            background: linear-gradient(135deg, #00f0ff 0%, #0072ff 100%);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.8rem;
-            padding: 6px 14px;
-            border-radius: 8px;
-        }
-
-        .price-tag {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .btn-action-edit {
-            border: 2px solid #ffca28; color: #ffca28;
-            font-family: 'Orbitron', sans-serif; font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .btn-action-edit:hover { background: #ffca28; color: #0a0612; box-shadow: 0 0 15px #ffca28; }
-
-        .btn-action-delete {
-            border: 2px solid #ff0055; color: #ff0055;
-            font-family: 'Orbitron', sans-serif; font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .btn-action-delete:hover { background: #ff0055; color: #fff; box-shadow: 0 0 15px #ff0055; }
-
-        .empty-box { background: rgba(22, 15, 38, 0.4); border: 2px dashed rgba(0, 240, 255, 0.3); border-radius: 24px; padding: 60px 40px; }
-    </style>
-</head>
-<body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-4">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand brand-logo d-flex align-items-center" href="#">
-                <i class="bi bi-dpad-fill me-3 fs-2"></i> GAMERSHOP
+    {% if juegos %}
+    <!-- Barra superior de herramientas horizontal -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 my-4">
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.35); font-size: 0.85rem; padding: 7px 14px; border-radius: 999px;">
+                <i class="bi bi-controller me-1"></i>{{ juegos|length }} título{% if juegos|length != 1 %}s{% endif %} registrado{% if juegos|length != 1 %}s{% endif %}
+            </span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <!-- Selector de vistas -->
+            <div class="btn-group" role="group" aria-label="Cambiar vista">
+                <button type="button" class="view-btn active" id="btn-view-boxes" onclick="cambiarVista('boxes')" title="Ver como cuadros horizontales">
+                    <i class="bi bi-view-stacked me-1"></i>Cuadros Horizontales
+                </button>
+                <button type="button" class="view-btn" id="btn-view-table" onclick="cambiarVista('table')" title="Ver como tabla">
+                    <i class="bi bi-table me-1"></i>Tabla
+                </button>
+                <button type="button" class="view-btn" id="btn-view-cards" onclick="cambiarVista('cards')" title="Ver como tarjetas">
+                    <i class="bi bi-grid-fill me-1"></i>Tarjetas
+                </button>
+            </div>
+            <a href="{% url 'crear_videojuego' %}" class="btn btn-primary-custom btn-sm px-3 py-2 d-inline-flex align-items-center">
+                <i class="bi bi-plus-lg me-1"></i>Nuevo Juego
             </a>
-            <div>
-                <a href="{% url 'crear_videojuego' %}" class="btn btn-add-game px-4 rounded-pill btn-md">
-                    <i class="bi bi-plus-circle-fill me-2"></i>AGREGAR JUEGO
+        </div>
+    </div>
+
+    <!-- VISTA 1: CUADROS HORIZONTALES (Predeterminada - Cuadros Blancos) -->
+    <div id="view-boxes">
+        {% for juego in juegos %}
+        <div class="game-horizontal-card p-3 p-md-4 mb-3 d-flex flex-wrap align-items-center justify-content-between gap-3" style="background: #ffffff !important; border: 1px solid #e2e8f0 !important; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);">
+            <!-- Título y Plataforma alineados horizontalmente -->
+            <div class="d-flex align-items-center gap-3" style="min-width: 260px; flex: 2;">
+                <div class="game-icon-box" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25);">
+                    <i class="bi bi-controller fs-3" style="color: #2563eb;"></i>
+                </div>
+                <div>
+                    <h3 class="h5 fw-bold mb-1" style="color: #000000 !important;">{{ juego.titulo }}</h3>
+                    <span class="badge-platform" style="background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; color: #1e293b !important;">
+                        <i class="bi bi-cpu"></i>{{ juego.plataforma }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Precio y Stock alineados horizontalmente -->
+            <div class="d-flex align-items-center gap-4" style="min-width: 220px; flex: 1;">
+                <div>
+                    <small class="d-block" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b !important;">Precio</small>
+                    <div class="price-tag" style="color: #000000 !important; font-weight: 700;">${{ juego.precio }} <span class="price-currency" style="color: #64748b !important;">CLP</span></div>
+                </div>
+                <div>
+                    <small class="d-block" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b !important;">Stock</small>
+                    {% if juego.stock == 0 %}
+                        <span class="badge bg-danger px-3 py-2" style="font-size: 0.75rem;">
+                            <i class="bi bi-x-circle me-1"></i>Sin stock
+                        </span>
+                    {% elif juego.stock <= 5 %}
+                        <span class="badge bg-warning text-dark px-3 py-2" style="font-size: 0.75rem;">
+                            <i class="bi bi-exclamation-triangle me-1"></i>{{ juego.stock }} unid.
+                        </span>
+                    {% else %}
+                        <span class="badge bg-success px-3 py-2" style="font-size: 0.75rem;">
+                            <i class="bi bi-check-circle me-1"></i>{{ juego.stock }} unid.
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Acciones Editar y Borrar horizontales -->
+            <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'editar_videojuego' juego.id %}" class="btn btn-sm btn-edit-custom px-3 py-2 d-inline-flex align-items-center">
+                    <i class="bi bi-pencil-square me-1"></i>Editar
+                </a>
+                <a href="{% url 'eliminar_videojuego' juego.id %}" class="btn btn-sm btn-delete-custom px-3 py-2 d-inline-flex align-items-center">
+                    <i class="bi bi-trash3 me-1"></i>Borrar
                 </a>
             </div>
         </div>
-    </nav>
+        {% endfor %}
+    </div>
 
-    <header class="container text-center pt-5 pb-4">
-        <h1 class="display-3 fw-black game-title-font text-white mb-2">
-            BÓVEDA DE <span style="color: var(--neon-pink); text-shadow: 0 0 15px rgba(255,0,127,0.5);">STOCK</span>
-        </h1>
-        <p class="lead text-muted fs-4">Administración en tiempo real de títulos y licencias activas.</p>
-        <div class="mx-auto mt-3" style="width: 100px; height: 4px; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink)); border-radius: 2px;"></div>
-    </header>
+    <!-- VISTA 2: TABLA (Cuadro Blanco) -->
+    <div id="view-table" class="custom-table-container" style="display: none; background: #ffffff !important; border: 1px solid #e2e8f0 !important; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);">
+        <div class="table-responsive">
+            <table class="table custom-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center" style="width: 60px;">#</th>
+                        <th scope="col">Título del Videojuego</th>
+                        <th scope="col">Plataforma</th>
+                        <th scope="col">Precio (CLP)</th>
+                        <th scope="col" class="text-center">Stock</th>
+                        <th scope="col" class="text-end" style="width: 210px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for juego in juegos %}
+                    <tr>
+                        <td class="text-center text-muted fw-bold">{{ forloop.counter }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-disc text-primary fs-5"></i>
+                                <span class="fw-bold fs-6" style="color: #000000 !important;">{{ juego.titulo }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge-platform" style="background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; color: #1e293b !important;">
+                                <i class="bi bi-cpu"></i>{{ juego.plataforma }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="price-tag" style="color: #000000 !important; font-weight: 700;">${{ juego.precio }}</span>
+                            <span class="price-currency" style="color: #64748b !important;">CLP</span>
+                        </td>
+                        <td class="text-center">
+                            {% if juego.stock == 0 %}
+                                <span class="badge bg-danger px-3 py-2" style="font-size: 0.75rem;">
+                                    <i class="bi bi-x-circle me-1"></i>Sin stock
+                                </span>
+                            {% elif juego.stock <= 5 %}
+                                <span class="badge bg-warning text-dark px-3 py-2" style="font-size: 0.75rem;">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>{{ juego.stock }} unid.
+                                </span>
+                            {% else %}
+                                <span class="badge bg-success px-3 py-2" style="font-size: 0.75rem;">
+                                    <i class="bi bi-check-circle me-1"></i>{{ juego.stock }} unid.
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-2">
+                                <a href="{% url 'editar_videojuego' juego.id %}" class="btn btn-sm btn-edit-custom px-3 py-1 d-inline-flex align-items-center">
+                                    <i class="bi bi-pencil-square me-1"></i>Editar
+                                </a>
+                                <a href="{% url 'eliminar_videojuego' juego.id %}" class="btn btn-sm btn-delete-custom px-3 py-1 d-inline-flex align-items-center">
+                                    <i class="bi bi-trash3 me-1"></i>Borrar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <main class="container pb-5 mt-4">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            {% for juego in juegos %}
-            <div class="col">
-                <div class="card h-100 game-card text-white shadow-lg">
-                    <div class="card-body d-flex flex-column p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge badge-platform text-uppercase">{{ juego.plataforma }}</span>
-                            <span class="text-muted small"><i class="bi bi-boxes me-1"></i>Stock: {{ juego.stock }}</span>
-                        </div>
-                        <h3 class="card-title h5 game-title-font fw-bold text-white mb-4 flex-grow-1">{{ juego.titulo }}</h3>
-                        <div class="mt-auto pt-3 border-top border-secondary border-opacity-25">
-                            <span class="text-muted d-block small mb-1">PRECIO BASE</span>
-                            <div class="price-tag">${{ juego.precio }} <span class="fs-6 text-info fw-normal">CLP</span></div>
-                        </div>
+    <!-- VISTA 3: TARJETAS (Cuadro Blanco) -->
+    <div id="view-cards" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" style="display: none;">
+        {% for juego in juegos %}
+        <div class="col">
+            <div class="card h-100 game-card border-0" style="background: #ffffff !important; border: 1px solid #e2e8f0 !important; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);">
+                <div class="card-body d-flex flex-column p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge-platform" style="background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; color: #1e293b !important;">{{ juego.plataforma }}</span>
+                        <span class="small" style="color: #64748b !important;">
+                            <i class="bi bi-boxes me-1"></i>Stock: {{ juego.stock }}
+                        </span>
                     </div>
-                    <div class="card-footer bg-transparent border-0 d-flex gap-2 px-4 pb-4 pt-0">
-                        <a href="{% url 'editar_videojuego' juego.id %}" class="btn btn-action-edit w-50 py-2">
-                            <i class="bi bi-pencil-square me-1"></i>Editar
-                        </a>
-                        <a href="{% url 'eliminar_videojuego' juego.id %}" class="btn btn-action-delete w-50 py-2">
-                            <i class="bi bi-trash3-fill me-1"></i>Borrar
-                        </a>
+                    <h3 class="card-title h5 font-heading fw-bold mb-4 flex-grow-1" style="color: #000000 !important;">{{ juego.titulo }}</h3>
+                    <div class="mt-auto pt-3 border-top" style="border-color: #e2e8f0 !important;">
+                        <span class="small d-block mb-1" style="color: #64748b !important;">Precio</span>
+                        <div class="price-tag" style="color: #000000 !important; font-weight: 700;">${{ juego.precio }} <span class="price-currency" style="color: #64748b !important;">CLP</span></div>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <div class="empty-box col-md-8 col-lg-6 mx-auto shadow">
-                    <i class="bi bi-folder-symlink display-2 text-muted mb-4 d-block" style="color: var(--neon-pink) !important;"></i>
-                    <h2 class="game-title-font fw-bold h4 text-white mb-3">SISTEMA COMPILADO SIN REGISTROS</h2>
-                    <p class="text-muted px-4 mb-4">La conexión con la base de datos se completó con éxito, pero la tabla se encuentra vacía.</p>
-                    <a href="{% url 'crear_videojuego' %}" class="btn btn-sm btn-info px-4 text-dark fw-bold rounded-3 game-title-font">
-                        <i class="bi bi-plus-circle-fill me-2"></i>INICIALIZAR INVENTARIO
+                <div class="card-footer bg-transparent border-0 d-flex gap-2 px-4 pb-4 pt-0">
+                    <a href="{% url 'editar_videojuego' juego.id %}" class="btn btn-edit-custom w-50 py-2 text-center">
+                        <i class="bi bi-pencil-square me-1"></i>Editar
+                    </a>
+                    <a href="{% url 'eliminar_videojuego' juego.id %}" class="btn btn-delete-custom w-50 py-2 text-center">
+                        <i class="bi bi-trash3 me-1"></i>Borrar
                     </a>
                 </div>
             </div>
-            {% endfor %}
         </div>
-    </main>
+        {% endfor %}
+    </div>
 
-    <script src="https://jsdelivr.net"></script>
-</body>
-</html>
+    {% else %}
+    <!-- Estado vacío cuando no hay juegos en la base de datos -->
+    <div class="col-12 text-center py-5">
+        <div class="empty-box col-md-8 col-lg-6 mx-auto">
+            <i class="bi bi-inboxes display-4 mb-4 d-block" style="color: var(--primary);"></i>
+            <h2 class="font-heading fw-bold h4 text-white mb-3">Aún no hay videojuegos en el catálogo</h2>
+            <p class="mb-4" style="color: var(--text-muted);">
+                La conexión con la base de datos funciona correctamente. Puedes comenzar a registrar videojuegos en el sistema.
+            </p>
+            <a href="{% url 'crear_videojuego' %}" class="btn btn-primary-custom px-4 py-2 d-inline-flex align-items-center">
+                <i class="bi bi-plus-circle-fill me-2"></i>Registrar el primer videojuego
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function cambiarVista(vista) {
+        const boxes = document.getElementById('view-boxes');
+        const tabla = document.getElementById('view-table');
+        const cards = document.getElementById('view-cards');
+        const btnBoxes = document.getElementById('btn-view-boxes');
+        const btnTabla = document.getElementById('btn-view-table');
+        const btnCards = document.getElementById('btn-view-cards');
+
+        if (!boxes || !tabla || !cards) return;
+
+        // Ocultar todos
+        boxes.style.display = 'none';
+        tabla.style.display = 'none';
+        cards.style.display = 'none';
+        btnBoxes.classList.remove('active');
+        btnTabla.classList.remove('active');
+        btnCards.classList.remove('active');
+
+        if (vista === 'table') {
+            tabla.style.display = 'block';
+            btnTabla.classList.add('active');
+            localStorage.setItem('gamershop_vista', 'table');
+        } else if (vista === 'cards') {
+            cards.style.display = 'flex';
+            btnCards.classList.add('active');
+            localStorage.setItem('gamershop_vista', 'cards');
+        } else {
+            boxes.style.display = 'block';
+            btnBoxes.classList.add('active');
+            localStorage.setItem('gamershop_vista', 'boxes');
+        }
+    }
+
+    // Por defecto cargar vista de cuadros horizontales
+    document.addEventListener('DOMContentLoaded', function() {
+        const vistaGuardada = localStorage.getItem('gamershop_vista');
+        if (vistaGuardada) {
+            cambiarVista(vistaGuardada);
+        } else {
+            cambiarVista('boxes');
+        }
+    });
+</script>
+{% endblock %}
